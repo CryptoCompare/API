@@ -4,6 +4,7 @@ import schedule
 import time
 import datetime
 from coinbase.wallet.client import Client
+import math
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "drftutorial.settings")
 import django
@@ -35,65 +36,74 @@ for i in range(1,4):
 def liveData():
 	response = requests.get("https://api.zebpay.com/api/v1/ticker?currencyCode=INR")
 	data = response.json()
-	zebpay = LiveData.objects.get(siteId = 1, currency = 'INR')
-	if data['buy'] != zebpay.buy and data['sell'] != zebpay.sell:
-		zebpay.buy = data['buy']
-		zebpay.sell = data['sell']
-		zebpay.save()
-		zebpayHistory = ZebpayHistory();
-		zebpayHistory.buy = 1
-		zebpayHistory.sell = 2
-		zebpayHistory.buyFees = 0
-		zebpayHistory.sellFees = 0
-		zebpayHistory.siteId = 4
-		zebpayHistory.timestamp = datetime.datetime.now()
-		zebpayHistory.save()
+	cur = LiveData.objects.get(siteId = 1, currency = 'INR')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(data['buy'],cur.buy,rel_tol=1e-11) or not math.isclose(data['sell'],cur.sell,rel_tol=1e-11):
+		cur.buy = data['buy']
+		cur.sell = data['sell']
+		cur.save()
+		history = ZebpayHistory();
+		history.buy = data['buy']
+		history.sell = data['sell']
+		history.currency = 'INR'
+		history.timestamp = datetime.datetime.now()
+		history.save()
 	response = requests.get("https://api.zebpay.com/api/v1/ticker?currencyCode=SGD")
 	data = response.json()
-	if data['buy'] != zebpay.buy and data['sell'] != zebpay.sell:
-		zebpay.buy = data['buy']
-		zebpay.sell = data['sell']
-		zebpay.save()
-		zebpayHistory = ZebpayHistory();
-		zebpayHistory.buy = 1
-		zebpayHistory.sell = 2
-		zebpayHistory.buyFees = 0
-		zebpayHistory.sellFees = 0
-		zebpayHistory.siteId = 4
-		zebpayHistory.timestamp = datetime.datetime.now()
-		zebpayHistory.save()
+	cur = LiveData.objects.get(siteId = 1, currency = 'SGD')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(data['buy'],cur.buy,rel_tol=1e-11) or not math.isclose(data['sell'],cur.sell,rel_tol=1e-11):
+		cur.buy = data['buy']
+		cur.sell = data['sell']
+		cur.save()
+		history = ZebpayHistory();
+		history.buy = data['buy']
+		history.sell = data['sell']
+		history.currency = 'SGD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
 	response = requests.get("https://api.zebpay.com/api/v1/ticker?currencyCode=USD")
 	data = response.json()
-	zebpay = LiveData.objects.get(siteId = 1, currency = 'USD')#.objects.get_or_create(id=1);
-	if data['buy'] != zebpay.buy and data['sell'] != zebpay.sell:
-		zebpay.buy = data['buy']
-		zebpay.sell = data['sell']
-		zebpay.save()
-		zebpayHistory = ZebpayHistory();
-		zebpayHistory.buy = 1
-		zebpayHistory.sell = 2
-		zebpayHistory.buyFees = 0
-		zebpayHistory.sellFees = 0
-		zebpayHistory.siteId = 4
-		zebpayHistory.timestamp = datetime.datetime.now()
-		zebpayHistory.save()
+	cur = LiveData.objects.get(siteId = 1, currency = 'USD')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(data['buy'],cur.buy,rel_tol=1e-11) or not math.isclose(data['sell'],cur.sell,rel_tol=1e-11):
+		cur.buy = data['buy']
+		cur.sell = data['sell']
+		cur.save()
+		history = ZebpayHistory();
+		history.buy = data['buy']
+		history.sell = data['sell']
+		history.currency = 'USD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
 	response = requests.get("https://www.coinhako.com/api/v1/price/currency/BTCSGD")
 	data = response.json()
-	zebpay = LiveData.objects.get(siteId = 3, currency = 'SGD')#.objects.get_or_create(id=1);
-	zebpay.buy = data['data']['buy_price']
-	zebpay.sell = data['data']['sell_price']
-	zebpay.save()
+	cur = LiveData.objects.get(siteId = 3, currency = 'SGD')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(data['data']['buy_price'],cur.buy,rel_tol=1e-11) or not math.isclose(ata['data']['sell_price'],cur.sell,rel_tol=1e-11):
+		cur.buy = data['data']['buy_price']
+		cur.sell = data['data']['sell_price']
+		cur.save()
+		history = ZebpayHistory();
+		history.buy = data['data']['buy_price']
+		history.sell = ata['data']['sell_price']
+		history.currency = 'SGD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
 	response = requests.get("https://www.coinhako.com/api/v1/price/currency/BTCUSD")
 	data = response.json()
-	zebpay = LiveData.objects.get(siteId = 3, currency = 'USD')#.objects.get_or_create(id=1);
-	zebpay.buy = data['data']['buy_price']
-	zebpay.sell = data['data']['sell_price']
-	zebpay.save()
-	print("YAG")
-	# else:
-	# 	zebpay.buy = data['buy']
-	# 	zebpay.sell = data['sell']
-	# 	zebpay.save()
+	cur = LiveData.objects.get(siteId = 3, currency = 'USD')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(data['data']['buy_price'],cur.buy,rel_tol=1e-11) or not math.isclose(ata['data']['sell_price'],cur.sell,rel_tol=1e-11):
+		cur.buy = data['data']['buy_price']
+		cur.sell = data['data']['sell_price']
+		cur.save()
+		history = ZebpayHistory();
+		history.buy = data['data']['buy_price']
+		history.sell = ata['data']['sell_price']
+		history.currency = 'USD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
 
 while 1:
    liveData()

@@ -1,5 +1,7 @@
 from .models import LiveData
 from .models import ZebpayHistory
+from .models import CoinhakoHistory
+from .models import CoinbaseHistory
 from rest_framework import serializers
 
 
@@ -8,8 +10,9 @@ class LiveDataSerializer(serializers.ModelSerializer):
         model = LiveData
         fields = ('buy', 'sell')
 
-class ZebpayHistorySerializer(serializers.ModelSerializer):
+class HistorySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ZebpayHistory
-		fields = ('buy',)
+		fields = ('buy','sell','timestamp')
+
 			

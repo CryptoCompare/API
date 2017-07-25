@@ -8,7 +8,7 @@ from .serializers import LiveDataSerializer
 from rest_framework import generics
 from .models import LiveData
 from .models import ZebpayHistory
-from .serializers import ZebpayHistorySerializer
+from .serializers import HistorySerializer
 
 
 class liveData(APIView):
@@ -19,3 +19,8 @@ class liveData(APIView):
 			serializer = LiveDataSerializer(buy, many=True)
 			return Response(serializer.data)
 # Create your views here.
+class ZebpaHistory(APIView):
+	def get(self, request, currency):
+		zebpayData = ZebpayHistory.objects.filter(currency = currency)
+		serializer = HistorySerializer(zebpayData, many=True)
+		return Response(serializer.data)
