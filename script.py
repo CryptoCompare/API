@@ -119,45 +119,37 @@ def liveData():
 		history.sell = data['data']['sell_price']
 		history.currency = 'SGD'
 		history.timestamp = datetime.datetime.now()
-		history.save()
-	client = Client(API_Key, API_Secret_Key)
-	#response = client.get_buy_price(currency_pair = 'BTC-USD')
-	data = client.get_buy_price(currency_pair = 'BTC-USD')
-	# response = client.get_sell_price(currency_pair = 'BTC-USD')
-	data2 = client.get_sell_price(currency_pair = 'BTC-USD')
+		history.save()	
+	response = requests.get("https://api.coinbase.com/v2/prices/buy?currency=USD")
+	data = response.json()
+	response = requests.get("https://api.coinbase.com/v2/prices/sell?currency=USD")
+	data2 = response.json()
 	cur = LiveData.objects.get(siteId = 2, currency = 'USD')
-	# print (data['buy'],data['sell'])
-	print (data['amount'])
-	if not math.isclose(float(data['amount']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data2['amount']),cur.sell,rel_tol=1e-11):
-		cur.buy = data['amount']
-		cur.sell = data2['amount']
+	if not math.isclose(float(data['data']['amount']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data2['data']['amount']),cur.sell,rel_tol=1e-11):
+		cur.buy = data['data']['amount']
+		cur.sell = data2['data']['amount']
 		cur.save()
 		history = CoinbaseHistory();
-		history.buy = data['amount']
-		history.sell = data2['amount']
+		history.buy = data['data']['amount']
+		history.sell = data2['data']['amount']
 		history.currency = 'USD'
 		history.timestamp = datetime.datetime.now()
 		history.save()
-	data = client.get_buy_price(currency_pair = 'BTC-SGD')
-	data2 = client.get_sell_price(currency_pair = 'BTC-SGD')
-	print (data['amount'])
+	response = requests.get("https://api.coinbase.com/v2/prices/buy?currency=SGD")
+	data = response.json()
+	response = requests.get("https://api.coinbase.com/v2/prices/sell?currency=SGD")
+	data2 = response.json()
 	cur = LiveData.objects.get(siteId = 2, currency = 'SGD')
-	# print (data['buy'],data['sell'])
-	if not math.isclose(float(data['amount']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data2['amount']),cur.sell,rel_tol=1e-11):
-		cur.buy = data['amount']
-		cur.sell = data2['amount']
+	if not math.isclose(float(data['data']['amount']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data2['data']['amount']),cur.sell,rel_tol=1e-11):
+		cur.buy = data['data']['amount']
+		cur.sell = data2['data']['amount']
 		cur.save()
 		history = CoinbaseHistory();
-		history.buy = data['amount']
-		history.sell = data2['amount']
+		history.buy = data['data']['amount']
+		history.sell = data2['data']['amount']
 		history.currency = 'SGD'
 		history.timestamp = datetime.datetime.now()
-		time_threshold = datetime.datetime.now() - datetime.timedelta(seconds=36000)
-		print (history.timestamp)
 		history.save()
-
-
-
 while 1:
    liveData()
    time.sleep(30)

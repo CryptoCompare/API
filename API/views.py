@@ -36,17 +36,17 @@ class History(APIView):
 		response = Response()
 		if int(siteId) == 1:
 			time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
-			data = ZebpayHistory.objects.filter(currency = request.GET['currency'], timestamp__range=(time_threshold,datetime.datetime.now()))
+			data = ZebpayHistory.objects.filter(currency = currency, timestamp__range=(time_threshold,datetime.datetime.now()))
 			serializer = ZebpayHistorySerializer(data, many=True)
 			response = Response(serializer.data)
 		elif int(siteId) == 2:
 			time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
-			data = CoinbaseHistory.objects.filter(currency = request.GET['currency'], timestamp__range=(time_threshold,datetime.datetime.now()))
+			data = CoinbaseHistory.objects.filter(currency = currency, timestamp__range=(time_threshold,datetime.datetime.now()))
 			serializer = CoinbaseHistorySerializer(data, many=True)
 			response = Response(serializer.data)
 		elif int(siteId) == 3:
 			time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
-			data = CoinhakoHistory.objects.filter(currency = request.GET['currency'], timestamp__range=(time_threshold,datetime.datetime.now()))
+			data = CoinhakoHistory.objects.filter(currency = currency, timestamp__range=(time_threshold,datetime.datetime.now()))
 			serializer = CoinhakoHistorySerializer(data, many=True)
 			response = Response(serializer.data)
 		#print (datetime.datetime.now() - response['timestamp'])

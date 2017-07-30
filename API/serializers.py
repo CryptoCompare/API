@@ -13,7 +13,7 @@ class LiveDataSerializer(serializers.ModelSerializer):
 class ZebpayHistorySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ZebpayHistory
-		fields = ('buy','sell',)
+		fields = ('buy','sell','timestamp')
 
 class CoinbaseHistorySerializer(serializers.ModelSerializer):
 	class Meta:
