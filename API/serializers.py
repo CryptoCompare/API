@@ -10,9 +10,20 @@ class LiveDataSerializer(serializers.ModelSerializer):
         model = LiveData
         fields = ('buy', 'sell')
 
-class HistorySerializer(serializers.ModelSerializer):
+class ZebpayHistorySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ZebpayHistory
+		fields = ('buy','sell',)
+
+class CoinbaseHistorySerializer(serializers.ModelSerializer):
+	class Meta:
+		model = CoinbaseHistory
 		fields = ('buy','sell','timestamp')
+
+class CoinhakoHistorySerializer(serializers.ModelSerializer):
+	class Meta:
+		model = CoinhakoHistory
+		fields = ('buy','sell','timestamp')
+
 
 			

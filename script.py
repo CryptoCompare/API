@@ -13,9 +13,11 @@ django.setup()
 # your imports, e.g. Django models
 from API.models import LiveData
 from API.models import ZebpayHistory
+from API.models import CoinhakoHistory
+from API.models import CoinbaseHistory
 
 LiveData.objects.all().delete()
-ZebpayHistory.objects.all().delete()
+# ZebpayHistory.objects.all().delete()
 
 # zebpay = ZebpayHistory.objects.all()
 # print (zebpay)
@@ -80,30 +82,81 @@ def liveData():
 	data = response.json()
 	cur = LiveData.objects.get(siteId = 3, currency = 'SGD')
 	# print (data['buy'],data['sell'])
-	# if not math.isclose(data['data']['buy_price'],cur.buy,rel_tol=1e-11) or not math.isclose(ata['data']['sell_price'],cur.sell,rel_tol=1e-11):
-	# 	cur.buy = data['data']['buy_price']
-	# 	cur.sell = data['data']['sell_price']
-	# 	cur.save()
-	# 	history = ZebpayHistory();
-	# 	history.buy = data['data']['buy_price']
-	# 	history.sell = ata['data']['sell_price']
-	# 	history.currency = 'SGD'
-	# 	history.timestamp = datetime.datetime.now()
-	# 	history.save()
-	# response = requests.get("https://www.coinhako.com/api/v1/price/currency/BTCUSD")
-	# data = response.json()
-	# cur = LiveData.objects.get(siteId = 3, currency = 'USD')
-	# # print (data['buy'],data['sell'])
-	# if not math.isclose(data['data']['buy_price'],cur.buy,rel_tol=1e-11) or not math.isclose(ata['data']['sell_price'],cur.sell,rel_tol=1e-11):
-	# 	cur.buy = data['data']['buy_price']
-	# 	cur.sell = data['data']['sell_price']
-	# 	cur.save()
-	# 	history = ZebpayHistory();
-	# 	history.buy = data['data']['buy_price']
-	# 	history.sell = ata['data']['sell_price']
-	# 	history.currency = 'USD'
-	# 	history.timestamp = datetime.datetime.now()
-	# 	history.save()
+	if not math.isclose(float(data['data']['buy_price']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['data']['sell_price']),cur.sell,rel_tol=1e-11):
+		cur.buy = float(data['data']['buy_price'])
+		cur.sell = float(data['data']['sell_price'])
+		cur.save()
+		history = CoinhakoHistory();
+		history.buy = float(data['data']['buy_price'])
+		history.sell = float(data['data']['sell_price'])
+		history.currency = 'SGD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
+	response = requests.get("https://www.coinhako.com/api/v1/price/currency/BTCUSD")
+	data = response.json()
+	cur = LiveData.objects.get(siteId = 3, currency = 'USD')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(float(data['data']['buy_price']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['data']['sell_price']),cur.sell,rel_tol=1e-11):
+		cur.buy = data['data']['buy_price']
+		cur.sell = data['data']['sell_price']
+		cur.save()
+		history = CoinhakoHistory();
+		history.buy = data['data']['buy_price']
+		history.sell = data['data']['sell_price']
+		history.currency = 'USD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
+	response = requests.get("https://www.coinhako.com/api/v1/price/currency/BTCSGD")
+	data = response.json()
+	cur = LiveData.objects.get(siteId = 3, currency = 'SGD')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(float(data['data']['buy_price']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['data']['sell_price']),cur.sell,rel_tol=1e-11):
+		cur.buy = data['data']['buy_price']
+		cur.sell = data['data']['sell_price']
+		cur.save()
+		history = CoinhakoHistory();
+		history.buy = data['data']['buy_price']
+		history.sell = data['data']['sell_price']
+		history.currency = 'SGD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
+	client = Client(API_Key, API_Secret_Key)
+	#response = client.get_buy_price(currency_pair = 'BTC-USD')
+	data = client.get_buy_price(currency_pair = 'BTC-USD')
+	# response = client.get_sell_price(currency_pair = 'BTC-USD')
+	data2 = client.get_sell_price(currency_pair = 'BTC-USD')
+	cur = LiveData.objects.get(siteId = 2, currency = 'USD')
+	# print (data['buy'],data['sell'])
+	print (data['amount'])
+	if not math.isclose(float(data['amount']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data2['amount']),cur.sell,rel_tol=1e-11):
+		cur.buy = data['amount']
+		cur.sell = data2['amount']
+		cur.save()
+		history = CoinbaseHistory();
+		history.buy = data['amount']
+		history.sell = data2['amount']
+		history.currency = 'USD'
+		history.timestamp = datetime.datetime.now()
+		history.save()
+	data = client.get_buy_price(currency_pair = 'BTC-SGD')
+	data2 = client.get_sell_price(currency_pair = 'BTC-SGD')
+	print (data['amount'])
+	cur = LiveData.objects.get(siteId = 2, currency = 'SGD')
+	# print (data['buy'],data['sell'])
+	if not math.isclose(float(data['amount']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data2['amount']),cur.sell,rel_tol=1e-11):
+		cur.buy = data['amount']
+		cur.sell = data2['amount']
+		cur.save()
+		history = CoinbaseHistory();
+		history.buy = data['amount']
+		history.sell = data2['amount']
+		history.currency = 'SGD'
+		history.timestamp = datetime.datetime.now()
+		time_threshold = datetime.datetime.now() - datetime.timedelta(seconds=36000)
+		print (history.timestamp)
+		history.save()
+
+
 
 while 1:
    liveData()
