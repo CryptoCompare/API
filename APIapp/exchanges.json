@@ -1,0 +1,196 @@
+{
+  "SGD": [
+    {
+      id: 1,
+      name: "FYB-SG",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://fybsg.com/"
+    },
+    {
+      id: 2,
+      name: "coinbase",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.coinbase.android",
+      web: "https://www.coinbase.com/"
+    },
+    {
+      id: 3,
+      name: "coinhako",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://www.coinhako.com/"
+    }
+  ],
+  "INR": [
+    {
+      id: 1,
+      name: "zebpay",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "zebpay.Application",
+      web: "https://www.zebpay.com/"
+    },
+    {
+      id: 2,
+      name: "unocoin",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.unocoin.unocoinwallet",
+      web: "https://www.unocoin.com/"
+    },
+    {
+      id: 3,
+      name: "coinsecure",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.coinsecure.bitcoinexchange",
+      web: "https://coinsecure.in/"
+    },
+    {
+      id: 4,
+      name: "bitlio",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://www.bitlio.com/"
+    },
+    {
+      id: 5,
+      name: "paxful",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://paxful.com/buy-bitcoin/with-any-payment-method/INR"
+    }
+  ],
+  "USD": [
+    {
+      id: 1,
+      name: "coinbase",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.coinbase.android",
+      web: "https://www.coinbase.com/"
+    },
+    {
+      id: 2,
+      name: "cex.io",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "io.cex.app.prod",
+      web: "https://cex.io/"
+    },
+    {
+      id: 3,
+      name: "OKCoin",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.okcoin.trader.google",
+      web: "https://www.okcoin.com/"
+    },
+    {
+      id: 4,
+      name: "BitFinex",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.bitfinex.bfxapp",
+      web: "https://www.bitfinex.com/"
+    },
+    {
+      id: 5,
+      name: "Bitstamp",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "net.bitstamp.bitstamp",
+      web: "https://www.bitstamp.net/"
+    },
+    {
+      id: 6,
+      name: "GDAX",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://www.gdax.com/"
+    }
+  ],
+  "EUR": [
+    {
+      id: 1,
+      name: "HitBTC",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://hitbtc.com/"
+    },
+    {
+      id: 2,
+      name: "cex.io",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "io.cex.app.prod",
+      web: "https://cex.io/"
+    },
+    {
+      id: 3,
+      name: "Kraken",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://www.kraken.com/"
+    },
+    {
+      id: 4,
+      name: "LakeBTC",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://www.lakebtc.com/"
+    },
+    {
+      id: 5,
+      name: "Bitstamp",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "net.bitstamp.bitstamp",
+      web: "https://www.bitstamp.net/"
+    },
+    {
+      id: 6,
+      name: "GDAX",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://www.gdax.com/"
+    }
+  ],
+  "CNY": [
+    {
+      id: 1,
+      name: "OKCoin",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.okcoin.trader.google",
+      web: "https://www.okcoin.com/"
+    },
+    {
+      id: 2,
+      name: "BTCCHINA",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "com.btcchina.spot",
+      web: "https://www.btcchina.com/"
+    },
+    {
+      id: 3,
+      name: "gatecoin",
+      buy_fee: "0", 
+      sell_fee: "0",
+      app: "",
+      web: "https://gatecoin.com/"
+    }
+  ]
+}
