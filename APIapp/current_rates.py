@@ -1,5 +1,16 @@
 import requests as r
 
+"""
+API will contain 1, 2 or 3 fields in the JSON file
+
+One: all the values exist in one JSON, volume will be null, if not provided by the API
+Two: buy, sell, volume is not provided by the API
+Three: if at least two of the three things(buy, sell, volume) differ
+
+
+Validate in current_rates.py if volume is provided or not
+"""
+
 data = {
 	"buy": -1,
 	"sell": -1,
