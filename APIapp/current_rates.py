@@ -11,38 +11,85 @@ Three: if at least two of the three things(buy, sell, volume) differ
 Validate in current_rates.py if volume is provided or not
 """
 
+"""
+Add in process exchanges here
+
+More: [
+	{
+	  "name": "quoine",
+	  "url": "https://developers.quoine.com/#introduction"
+	},
+	{
+	  "name": "bittrex",
+	  "url": "https://bittrex.com/Home/Api"
+	}
+]
+"""
+
 data = {
+	"success": False,
 	"buy": -1,
 	"sell": -1,
 	"volume": -1
 }
-def getRate(url, buyKey, sellKey, volumeKey):
+
+def getRate(apiInfo):
+	if(len(apiInfo)>0):
+		if 'all' in apiInfo:
+			api = apiInfo['all']
+			if 'volumeKey' in apiInfo:
+				sendRequest(api['endpoint'], api['buyKey'], api['sellKey'], api['volumeKey'])
+			else:
+				sendRequest(api['endpoint'], api['buyKey'], api['sellKey'], -1)
+			print data
+		else :
+			apiBuy = apiInfo['buy']
+			sendRequest(apiBuy['endpoint'], apiBuy['buyKey'], -1, -1)
+
+			apiSell = apiInfo['sell']
+			sendRequest(apiSell['endpoint'], -1, apiSell['sellKey'], -1)
+
+			if 'volume' in apiInfo:
+				apiVolume = apiInfo['volume']
+				sendRequest(apiVolume['endpoint'], -1, -1, apiVolume['volumeKey'])
+			print data
+
+
+
+def sendRequest(url, buyKey, sellKey, volumeKey):
 	response = r.get(url)
 	responseJson = response.json()
 
-	buyKey = buyKey.split('.')
-	sellKey = sellKey.split('.')
-	volumeKey = volumeKey.split('.')
+	if response.status_code == 200:
+		data['success'] = True
 
-	val = responseJson
-	for key in buyKey:
-		val = val[key]
-	data['buy'] = val
+	# Loop because json data can be nested
+	# Reassign val because val is being updated everytime in loop
 
-	val = responseJson
-	for key in sellKey:
-		val = val[key]
-	data['sell'] = val
 
-	val = responseJson
-	for key in volumeKey:
-		val = val[key]
-	data['volume'] = val
+	if buyKey != -1:
+		buyKey = buyKey.split('.')
+		val = responseJson
+		for key in buyKey:
+			val = val[key]
+		data['buy'] = val
 
-	print data
+	if sellKey != -1:
+		sellKey = sellKey.split('.')
+		val = responseJson
+		for key in sellKey:
+			val = val[key]
+		data['sell'] = val
 
-url = "https://api.coinbase.com/v2/prices/sell?currency=SGD"
-buyKey = "data.amount"
-sellKey = "data.currency"
-volumeKey = "data.currency"
-getRate(url, buyKey, sellKey, volumeKey)
+	if volumeKey != -1:
+		volumeKey = volumeKey.split('.')
+		val = responseJson
+		for key in volumeKey:
+			val = val[key]
+		data['volume'] = val
+
+# url = "https://api.coinbase.com/v2/prices/sell?currency=SGD"
+# buyKey = "data.amount"
+# sellKey = "data.currency"
+# volumeKey = "data.currency"
+# sendRequest(url, buyKey, sellKey, volumeKey)
