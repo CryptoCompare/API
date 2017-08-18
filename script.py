@@ -5,6 +5,8 @@ import time
 import datetime
 from coinbase.wallet.client import Client
 import math
+import json
+from pprint import pprint
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "APIapp.settings")
 import django
@@ -35,6 +37,12 @@ for i in range(1,4):
 		data.currency = currency[j]
 		data.save()
 #print(LiveData.objects.all().count())
+# url = "https://api.coinbase.com/v2/prices/sell?currency=SGD"
+# buyKey = "data.amount"
+# sellKey = "data.currency"
+# volumeKey = "data.currency"
+# getRate(url, buyKey, sellKey, volumeKey)
+
 def liveData():
 	response = requests.get("https://api.zebpay.com/api/v1/ticker?currencyCode=INR")
 	data = response.json()

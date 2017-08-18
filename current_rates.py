@@ -1,5 +1,17 @@
 import requests as r
 import json
+import os
+import schedule
+import time
+import datetime
+from coinbase.wallet.client import Client
+import math
+import json
+from pprint import pprint
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "APIapp.settings")
+import django
+django.setup()
 """
 API will contain 1, 2 or 3 fields in the JSON file
 
@@ -25,6 +37,14 @@ More: [
 	}
 ]
 """
+from API.models import LiveData
+from API.models import ZebpayHistory
+from API.models import CoinhakoHistory
+from API.models import CoinbaseHistory
+
+LiveData.objects.all().delete()
+
+
 
 data = {
 	"success": False,
@@ -64,7 +84,6 @@ def getRate(apiInfo):
 			if 'volume' in apiInfo:
 				apiVolume = apiInfo['volume']
 				sendRequest(apiVolume['endpoint'], -1, -1, apiVolume['volumeKey'])
-		return data
 
 def sendRequest(url, buyKey, sellKey, volumeKey):
 	response = r.get(url)
@@ -103,16 +122,33 @@ filename = "exchanges.json"
 try:
 	f = open(filename, 'r')
 	json_data = json.loads(f.read())
-	for key, value in json_data.iteritems():
+	for key, value in json_data.items():
+		for site in value:
+			data1 = LiveData()
+			data1.buy = 0
+			data1.sell = 0
+			data1.buyFees = 0
+			data1.sellFees = 0
+			data1.siteId = site['id']
+			data1.currency = key
+			data1.save()
+
+except IOError:
+	print ('problem reading: ' + filename)
+
+while 1:
+	for key, value in json_data.items():
 			for site in value:
 				getRate(site['api'])
 				response_data["currency"] = key
 				response_data["id"] = site['id']
-				response_data["success"] = data["success"]
+#				response_data["success"] = data["success"]
 				response_data["buy"] = data["buy"]
 				response_data["sell"] = data["sell"]
 				response_data["volume"] = data["volume"]
-				print response_data
-	f.close()
-except IOError:
-	print 'problem reading: ' + filename
+				cur = LiveData.objects.get(siteId = site['id'], currency = key)
+				if not math.isclose(float(response_data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(response_data['sell']),cur.sell,rel_tol=1e-11):
+					cur.buy = data['buy']
+					cur.sell = data['sell']
+					cur.save()
+	time.sleep(30)
