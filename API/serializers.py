@@ -1,15 +1,15 @@
-from .models import LiveData
-from .models import History
+from .models import BitcoinLiveData
+from .models import BitcoinHistory
 from rest_framework import serializers
 
-class LiveDataSerializer(serializers.ModelSerializer):
+class BitcoinLiveDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LiveData
+        model = BitcoinLiveData
         fields = ('buy', 'sell')
 
-class HistorySerializer(serializers.ModelSerializer):
+class BitcoinHistorySerializer(serializers.ModelSerializer):
 	class Meta:
-		model = History
+		model = BitcoinHistory
 		fields = ('buy','sell','timestamp')
 
 

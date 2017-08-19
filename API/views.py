@@ -3,48 +3,62 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics
-from .models import LiveData
-from .serializers import LiveDataSerializer
+from .serializers import BitcoinLiveDataSerializer
 from rest_framework import generics
-from .models import LiveData
-from .models import History
-from .serializers import HistorySerializer
+from .models import BitcoinLiveData
+from .models import BitcoinHistory
+from .serializers import BitcoinHistorySerializer
 import datetime
 from datetime import timedelta
 import json
 
 
 class liveData(APIView):
-	def get(self, request):
+	def post(self, request):
 		# ids = self.kwargs['siteId']
 		# curr = self.kwargs['currency']
 		response = {}
 		site = []
+		body_unicode = request.body.decode('utf-8')
+		body = json.loads(body_unicode)
 		filename = "included_sites.json"
 		try :
 			f = open(filename, 'r')
 			json_data = json.loads(f.read())
 			for key, value in json_data.items():
 				site.append(value)
-			siteId = request.GET.getlist('siteId')
-			currency = request.GET.getlist('currency')
-			for i in range(len(siteId)):
-				buy = LiveData.objects.filter(siteId = siteId[i], currency = currency[i])
-				serializer = LiveDataSerializer(buy, many=True)
-				response[site[int(siteId[i])-1]] = serializer.data
-				print("g")
-				print(serializer.data)
+			for cryptoCurrency in body:
+				for currency in body[cryptoCurrency]:
+					for siteId in body[cryptoCurrency][currency]:
+						buy = BitcoinLiveData.objects.filter(siteId = siteId, currency = currency)
+						serializer = BitcoinLiveDataSerializer(buy, many=True)
+						response[site[int(siteId)-1]] = serializer.data
 		except Exception as e:
 			print(e)
 		#response_json = json.dumps(response)
 		return Response(response)
 # Create your views here.
 class history(APIView):
-	def get(self, request, siteId, currency, time):
-		response = Response()
-		time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
-		print(time_threshold)
-		data = History.objects.filter(currency = currency, siteId = siteId, timestamp__range=(time_threshold,datetime.datetime.now()))
-		serializer = HistorySerializer(data, many=True)
-		response = Response(serializer.data)
-		return response
+	def post(self, request):
+		body_unicode = request.body.decode('utf-8')
+		body = json.loads(body_unicode)
+		response = {}
+		site = []
+		filename = "included_sites.json"
+		try:
+			f = open(filename, 'r')
+			json_data = json.loads(f.read())
+			for key, value in json_data.items():
+				site.append(value)
+			for cryptoCurrency in body:
+				for currency in body[cryptoCurrency]:
+					for siteData in body[cryptoCurrency][currency]:
+						print(siteData['id'])
+						time_threshold = datetime.datetime.now() - timedelta(seconds = int(siteData['timestamp']))
+						data = BitcoinHistory.objects.filter(currency = currency, siteId = siteData['id'], timestamp__range=(time_threshold,datetime.datetime.now()))
+						serializer = BitcoinHistorySerializer(data, many=True)
+						response[site[int(siteData['id'])-1]] = serializer.data
+
+		except Exception as e:
+			print(e)
+		return Response(response)

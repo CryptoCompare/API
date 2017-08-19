@@ -37,13 +37,10 @@ More: [
 	}
 ]
 """
-from API.models import LiveData
-from API.models import History
+from API.models import BitcoinLiveData
+from API.models import BitcoinHistory
 
-LiveData.objects.all().delete()
-History.objects.all().delete()
-
-
+BitcoinLiveData.objects.all().delete()
 
 data = {
 	"success": False,
@@ -123,7 +120,7 @@ try:
 	json_data = json.loads(f.read())
 	for key, value in json_data.items():
 		for site in value:
-			data1 = LiveData()
+			data1 = BitcoinLiveData()
 			data1.buy = 0
 			data1.sell = 0
 			data1.buyFees = 0
@@ -145,12 +142,12 @@ while 1:
 				response_data["buy"] = data["buy"]
 				response_data["sell"] = data["sell"]
 				response_data["volume"] = data["volume"]
-				cur = LiveData.objects.get(siteId = site['id'], currency = key)
+				cur = BitcoinLiveData.objects.get(siteId = site['id'], currency = key)
 				if not math.isclose(float(response_data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(response_data['sell']),cur.sell,rel_tol=1e-11):
 					cur.buy = data['buy']
 					cur.sell = data['sell']
 					cur.save()
-					history = History();
+					history = BitcoinHistory();
 					history.buy = data['buy']
 					history.sell = data['sell']
 					history.currency = key
