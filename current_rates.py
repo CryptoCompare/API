@@ -38,6 +38,7 @@ More: [
 ]
 """
 from API.models import BitcoinLiveData
+from API.models import BitcoinHistory
 
 BitcoinLiveData.objects.all().delete()
 
