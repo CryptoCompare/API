@@ -11,19 +11,8 @@ class LiveData(models.Model):
     siteId = models.IntegerField()
     currency = models.CharField(max_length=255)
 
-class ZebpayHistory(models.Model):
-    buy = models.DecimalField(decimal_places=10, max_digits=20)
-    sell = models.DecimalField(decimal_places=10, max_digits=20)
-    currency = models.CharField(max_length=255)
-    timestamp = models.DateTimeField(default=timezone.now)
-
-class CoinhakoHistory(models.Model):
-    buy = models.DecimalField(decimal_places=10, max_digits=20)
-    sell = models.DecimalField(decimal_places=10, max_digits=20)
-    currency = models.CharField(max_length=255)
-    timestamp = models.DateTimeField(default=timezone.now)
-
-class CoinbaseHistory(models.Model):
+class History(models.Model):
+    siteId = models.IntegerField()
     buy = models.DecimalField(decimal_places=10, max_digits=20)
     sell = models.DecimalField(decimal_places=10, max_digits=20)
     currency = models.CharField(max_length=255)

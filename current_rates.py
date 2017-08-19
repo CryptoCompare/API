@@ -38,11 +38,10 @@ More: [
 ]
 """
 from API.models import LiveData
-from API.models import ZebpayHistory
-from API.models import CoinhakoHistory
-from API.models import CoinbaseHistory
+from API.models import History
 
 LiveData.objects.all().delete()
+History.objects.all().delete()
 
 
 
@@ -151,4 +150,15 @@ while 1:
 					cur.buy = data['buy']
 					cur.sell = data['sell']
 					cur.save()
+					history = History();
+					history.buy = data['buy']
+					history.sell = data['sell']
+					history.currency = key
+					history.timestamp = datetime.datetime.now()
+					history.siteId = site['id']
+					try:
+						print(history.siteId)
+						history.save()
+					except Exception as e:
+						print(e)
 	time.sleep(30)

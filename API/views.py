@@ -7,10 +7,8 @@ from .models import LiveData
 from .serializers import LiveDataSerializer
 from rest_framework import generics
 from .models import LiveData
-from .models import ZebpayHistory
-from .serializers import ZebpayHistorySerializer
-from .serializers import CoinbaseHistorySerializer
-from .serializers import CoinhakoHistorySerializer
+from .models import History
+from .serializers import HistorySerializer
 import datetime
 from datetime import timedelta
 import json
@@ -34,28 +32,19 @@ class liveData(APIView):
 				buy = LiveData.objects.filter(siteId = siteId[i], currency = currency[i])
 				serializer = LiveDataSerializer(buy, many=True)
 				response[site[int(siteId[i])-1]] = serializer.data
+				print("g")
+				print(serializer.data)
 		except Exception as e:
 			print(e)
 		#response_json = json.dumps(response)
 		return Response(response)
 # Create your views here.
-class History(APIView):
+class history(APIView):
 	def get(self, request, siteId, currency, time):
 		response = Response()
-		if int(siteId) == 1:
-			time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
-			data = ZebpayHistory.objects.filter(currency = currency, timestamp__range=(time_threshold,datetime.datetime.now()))
-			serializer = ZebpayHistorySerializer(data, many=True)
-			response = Response(serializer.data)
-		elif int(siteId) == 2:
-			time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
-			data = CoinbaseHistory.objects.filter(currency = currency, timestamp__range=(time_threshold,datetime.datetime.now()))
-			serializer = CoinbaseHistorySerializer(data, many=True)
-			response = Response(serializer.data)
-		elif int(siteId) == 3:
-			time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
-			data = CoinhakoHistory.objects.filter(currency = currency, timestamp__range=(time_threshold,datetime.datetime.now()))
-			serializer = CoinhakoHistorySerializer(data, many=True)
-			response = Response(serializer.data)
-		#print (datetime.datetime.now() - response['timestamp'])
+		time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
+		print(time_threshold)
+		data = History.objects.filter(currency = currency, siteId = siteId, timestamp__range=(time_threshold,datetime.datetime.now()))
+		serializer = HistorySerializer(data, many=True)
+		response = Response(serializer.data)
 		return response
