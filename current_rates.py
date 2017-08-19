@@ -38,7 +38,6 @@ More: [
 ]
 """
 from API.models import BitcoinLiveData
-from API.models import BitcoinHistory
 
 BitcoinLiveData.objects.all().delete()
 
@@ -127,6 +126,14 @@ try:
 			data1.sellFees = 0
 			data1.siteId = site['id']
 			data1.currency = key
+			data1.lastHourMin = -1;
+			data1.lastDayMin = -1;
+			data1.lastWeekMin = -1;
+			data1.lastMonthMin = -1;
+			data1.lastHourMax = -1;
+			data1.lastDayMax = -1;
+			data1.lastWeekMax = -1;
+			data1.lastMonthMax = -1;
 			data1.save()
 
 except IOError:
