@@ -166,7 +166,6 @@ while 1:
 				getRate(site['api'])
 				cur = BitcoinLiveData.objects.get(siteId = site['id'], currency = key)
 				if not math.isclose(float(data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['sell']),cur.sell,rel_tol=1e-11) and data['success']:
-					print( site['id'], key)
 					cur.buy = float(data['buy'])
 					cur.sell = float(data['sell'])
 					history = BitcoinHistory();
