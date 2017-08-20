@@ -18,15 +18,15 @@ class liveData(APIView):
 		# ids = self.kwargs['siteId']
 		# curr = self.kwargs['currency']
 		response = {}
-		site = []
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
 		filename = "included_sites.json"
 		try :
 			f = open(filename, 'r')
 			json_data = json.loads(f.read())
+			site = [None]*(len(json_data)+1)
 			for key, value in json_data.items():
-				site.append(value)
+				site[int(key)-1] = value
 			for cryptoCurrency in body:
 				for currency in body[cryptoCurrency]:
 					for siteId in body[cryptoCurrency][currency]:
@@ -48,8 +48,9 @@ class history(APIView):
 		try:
 			f = open(filename, 'r')
 			json_data = json.loads(f.read())
+			site = [None]*(len(json_data)+1)
 			for key, value in json_data.items():
-				site.append(value)
+				site[int(key)-1] = value
 			for cryptoCurrency in body:
 				for currency in body[cryptoCurrency]:
 					for siteData in body[cryptoCurrency][currency]:
