@@ -182,6 +182,9 @@ while 1:
 				cur.lastDayMinBuy, cur.lastDayMinSell, cur.lastDayMaxBuy, cur.lastDayMaxSell = getMin(86400, key, site['id'])
 				cur.lastWeekMinBuy, cur.lastWeekMinSell, cur.lastWeekMaxBuy, cur.lastWeekMaxSell = getMin(604800, key, site['id'])
 				cur.lastMonthMinBuy, cur.lastMonthMinSell, cur.lastMonthMaxBuy, cur.lastMonthMaxSell = getMin(2592000, key, site['id'])
-				cur.save()
+				try:
+					cur.save()
+				except Exception as e:
+					print(e)
 
 	time.sleep(30)
