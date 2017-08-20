@@ -5,7 +5,8 @@ from rest_framework import serializers
 class BitcoinLiveDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = BitcoinLiveData
-        fields = ('buy', 'sell', 'lastHourMin', 'lastDayMin', 'lastWeekMin', 'lastMonthMin', 'lastHourMax', 'lastDayMax', 'lastWeekMax', 'lastMonthMax')
+        fields = ('buy', 'sell', 'lastHourMinBuy', 'lastDayMinBuy', 'lastWeekMinBuy', 'lastMonthMinBuy', 'lastHourMaxBuy', 'lastDayMaxBuy', 'lastWeekMaxBuy', 'lastMonthMaxBuy',
+        	 'lastHourMinSell', 'lastDayMinSell', 'lastWeekMinSell', 'lastMonthMinSell', 'lastHourMaxSell', 'lastDayMaxSell', 'lastWeekMaxSell', 'lastMonthMaxSell')
 
 class BitcoinHistorySerializer(serializers.ModelSerializer):
 	class Meta:

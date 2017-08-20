@@ -7,7 +7,10 @@ import datetime
 from coinbase.wallet.client import Client
 import math
 import json
+import datetime
+from datetime import timedelta
 from pprint import pprint
+import sys
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "APIapp.settings")
 import django
@@ -47,15 +50,6 @@ data = {
 	"buy": -1,
 	"sell": -1,
 	"volume": -1
-}
-response_data = {
-	"currency": "CUR",
-	"id": -1,
-	"success": False,
-	"buy": -1,
-	"sell": -1,
-	"volume": -1
-
 }
 
 def getRate(apiInfo):
@@ -113,6 +107,21 @@ def sendRequest(url, buyKey, sellKey, volumeKey):
 			val = val[key]
 		data['volume'] = val
 
+def getMin(time, currency, id):
+	time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
+	lastx = BitcoinHistory.objects.filter(currency = currency, siteId = id, timestamp__range=(time_threshold,datetime.datetime.now()))
+	minBuy = 9999999999999999999
+	minSell = 9999999999999999999
+	maxBuy = 0
+	maxSell = 0
+	for val in lastx:
+		minBuy = min(val.buy, minBuy)
+		maxBuy = max(val.buy, maxBuy)
+		minSell = min(val.sell, minSell)
+		maxSell = max(val.sell, maxSell)
+
+	return (minBuy, minSell, maxBuy, maxSell)
+
 filename = "exchanges.json"
 
 try:
@@ -127,14 +136,22 @@ try:
 			data1.sellFees = 0
 			data1.siteId = site['id']
 			data1.currency = key
-			data1.lastHourMin = -1;
-			data1.lastDayMin = -1;
-			data1.lastWeekMin = -1;
-			data1.lastMonthMin = -1;
-			data1.lastHourMax = -1;
-			data1.lastDayMax = -1;
-			data1.lastWeekMax = -1;
-			data1.lastMonthMax = -1;
+			data1.lastHourMinBuy = -1;
+			data1.lastDayMinBuy = -1;
+			data1.lastWeekMinBuy = -1;
+			data1.lastMonthMinBuy = -1;
+			data1.lastHourMaxBuy = -1;
+			data1.lastDayMaxBuy = -1;
+			data1.lastWeekMaxBuy = -1;
+			data1.lastMonthMaxBuy = -1;
+			data1.lastHourMinSell = -1;
+			data1.lastDayMinSell = -1;
+			data1.lastWeekMinSell = -1;
+			data1.lastMonthMinSell = -1;
+			data1.lastHourMaxSell = -1;
+			data1.lastDayMaxSell = -1;
+			data1.lastWeekMaxSell = -1;
+			data1.lastMonthMaxSell = -1;
 			data1.save()
 
 except IOError:
@@ -144,14 +161,12 @@ while 1:
 	for key, value in json_data.items():
 			for site in value:
 				getRate(site['api'])
-				response_data["currency"] = key
-				response_data["id"] = site['id']
-#				response_data["success"] = data["success"]
-				response_data["buy"] = data["buy"]
-				response_data["sell"] = data["sell"]
-				response_data["volume"] = data["volume"]
 				cur = BitcoinLiveData.objects.get(siteId = site['id'], currency = key)
-				if not math.isclose(float(response_data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(response_data['sell']),cur.sell,rel_tol=1e-11):
+				cur.lastHourMinBuy, cur.lastHourMinSell, cur.lastHourMaxBuy, cur.lastHourMaxSell = getMin(3600, key, site['id'])
+				cur.lastDayMinBuy, cur.lastDayMinSell, cur.lastDayMaxBuy, cur.lastDayMaxSell = getMin(86400, key, site['id'])
+				cur.lastWeekMinBuy, cur.lastWeekMinSell, cur.lastWeekMaxBuy, cur.lastWeekMaxSell = getMin(604800, key, site['id'])
+				cur.lastMonthMinBuy, cur.lastMonthMinSell, cur.lastMonthMaxBuy, cur.lastMonthMaxSell = getMin(2592000, key, site['id'])
+				if not math.isclose(float(data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['sell']),cur.sell,rel_tol=1e-11):
 					cur.buy = data['buy']
 					cur.sell = data['sell']
 					cur.save()
