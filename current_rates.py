@@ -110,10 +110,10 @@ def sendRequest(url, buyKey, sellKey, volumeKey):
 def getMin(time, currency, id):
 	time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
 	lastx = BitcoinHistory.objects.filter(currency = currency, siteId = id, timestamp__range=(time_threshold,datetime.datetime.now()))
-	minBuy = 9999999999999999999
-	minSell = 9999999999999999999
-	maxBuy = 0
-	maxSell = 0
+	minBuy = float(9999999999999999999)
+	minSell = float(9999999999999999999)
+	maxBuy = float(0)
+	maxSell = float(0)
 	for val in lastx:
 		minBuy = float(min(val.buy, minBuy))
 		maxBuy = float(max(val.buy, maxBuy))
