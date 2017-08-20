@@ -115,10 +115,10 @@ def getMin(time, currency, id):
 	maxBuy = 0
 	maxSell = 0
 	for val in lastx:
-		minBuy = min(val.buy, minBuy)
-		maxBuy = max(val.buy, maxBuy)
-		minSell = min(val.sell, minSell)
-		maxSell = max(val.sell, maxSell)
+		minBuy = float(min(val.buy, minBuy))
+		maxBuy = float(max(val.buy, maxBuy))
+		minSell = float(min(val.sell, minSell))
+		maxSell = float(max(val.sell, maxSell))
 
 	return (minBuy, minSell, maxBuy, maxSell)
 
@@ -166,12 +166,13 @@ while 1:
 				cur.lastWeekMinBuy, cur.lastWeekMinSell, cur.lastWeekMaxBuy, cur.lastWeekMaxSell = getMin(604800, key, site['id'])
 				cur.lastMonthMinBuy, cur.lastMonthMinSell, cur.lastMonthMaxBuy, cur.lastMonthMaxSell = getMin(2592000, key, site['id'])
 				if not math.isclose(float(data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['sell']),cur.sell,rel_tol=1e-11):
-					cur.buy = data['buy']
-					cur.sell = data['sell']
+					print( site['id'], key)
+					cur.buy = float(data['buy'])
+					cur.sell = float(data['sell'])
 					cur.save()
 					history = BitcoinHistory();
-					history.buy = data['buy']
-					history.sell = data['sell']
+					history.buy = float(data['buy'])
+					history.sell = float(data['sell'])
 					history.currency = key
 					history.timestamp = datetime.datetime.now()
 					history.siteId = site['id']
