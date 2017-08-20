@@ -153,7 +153,6 @@ try:
 			data1.lastWeekMaxSell = -1;
 			data1.lastMonthMaxSell = -1;
 			data1.save()
-
 except IOError:
 	print ('problem reading: ' + filename)
 
@@ -177,7 +176,6 @@ while 1:
 					history.timestamp = datetime.datetime.now()
 					history.siteId = site['id']
 					try:
-						print(history.siteId)
 						history.save()
 					except Exception as e:
 						print(e)
