@@ -76,36 +76,41 @@ def getRate(apiInfo):
 				sendRequest(apiVolume['endpoint'], -1, -1, apiVolume['volumeKey'])
 
 def sendRequest(url, buyKey, sellKey, volumeKey):
-	response = r.get(url)
-	responseJson = response.json()
+	try :
 
-	if response.status_code == 200:
-		data['success'] = True
+		response = r.get(url)
+		responseJson = response.json()
 
-	# Loop because json data can be nested
-	# Reassign val because val is being updated everytime in loop
+		if response.status_code == 200:
+			data['success'] = True
+			# Loop because json data can be nested
+			# Reassign val because val is being updated everytime in loop
 
+			if buyKey != -1:
+				buyKey = buyKey.split('.')
+				val = responseJson
+				for key in buyKey:
+					val = val[key]
+				data['buy'] = val
 
-	if buyKey != -1:
-		buyKey = buyKey.split('.')
-		val = responseJson
-		for key in buyKey:
-			val = val[key]
-		data['buy'] = val
+			if sellKey != -1:
+				sellKey = sellKey.split('.')
+				val = responseJson
+				for key in sellKey:
+					val = val[key]
+				data['sell'] = val
 
-	if sellKey != -1:
-		sellKey = sellKey.split('.')
-		val = responseJson
-		for key in sellKey:
-			val = val[key]
-		data['sell'] = val
+			if volumeKey != -1:
+				volumeKey = volumeKey.split('.')
+				val = responseJson
+				for key in volumeKey:
+					val = val[key]
+				data['volume'] = val
+		else:
+			data['success'] = False
 
-	if volumeKey != -1:
-		volumeKey = volumeKey.split('.')
-		val = responseJson
-		for key in volumeKey:
-			val = val[key]
-		data['volume'] = val
+	except Exception as e:
+		data['success'] = False
 
 def getMin(time, currency, id):
 	time_threshold = datetime.datetime.now() - timedelta(seconds = int(time))
@@ -161,11 +166,7 @@ while 1:
 			for site in value:
 				getRate(site['api'])
 				cur = BitcoinLiveData.objects.get(siteId = site['id'], currency = key)
-				cur.lastHourMinBuy, cur.lastHourMinSell, cur.lastHourMaxBuy, cur.lastHourMaxSell = getMin(3600, key, site['id'])
-				cur.lastDayMinBuy, cur.lastDayMinSell, cur.lastDayMaxBuy, cur.lastDayMaxSell = getMin(86400, key, site['id'])
-				cur.lastWeekMinBuy, cur.lastWeekMinSell, cur.lastWeekMaxBuy, cur.lastWeekMaxSell = getMin(604800, key, site['id'])
-				cur.lastMonthMinBuy, cur.lastMonthMinSell, cur.lastMonthMaxBuy, cur.lastMonthMaxSell = getMin(2592000, key, site['id'])
-				if not math.isclose(float(data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['sell']),cur.sell,rel_tol=1e-11):
+				if not math.isclose(float(data['buy']),cur.buy,rel_tol=1e-11) or not math.isclose(float(data['sell']),cur.sell,rel_tol=1e-11) and data['success']:
 					print( site['id'], key)
 					cur.buy = float(data['buy'])
 					cur.sell = float(data['sell'])
@@ -180,4 +181,9 @@ while 1:
 						history.save()
 					except Exception as e:
 						print(e)
+				cur.lastHourMinBuy, cur.lastHourMinSell, cur.lastHourMaxBuy, cur.lastHourMaxSell = getMin(3600, key, site['id'])
+				cur.lastDayMinBuy, cur.lastDayMinSell, cur.lastDayMaxBuy, cur.lastDayMaxSell = getMin(86400, key, site['id'])
+				cur.lastWeekMinBuy, cur.lastWeekMinSell, cur.lastWeekMaxBuy, cur.lastWeekMaxSell = getMin(604800, key, site['id'])
+				cur.lastMonthMinBuy, cur.lastMonthMinSell, cur.lastMonthMaxBuy, cur.lastMonthMaxSell = getMin(2592000, key, site['id'])
+
 	time.sleep(30)
