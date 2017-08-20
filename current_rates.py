@@ -124,7 +124,6 @@ def getMin(time, currency, id):
 		maxBuy = float(max(val.buy, maxBuy))
 		minSell = float(min(val.sell, minSell))
 		maxSell = float(max(val.sell, maxSell))
-
 	return (minBuy, minSell, maxBuy, maxSell)
 
 filename = "exchanges.json"
@@ -170,7 +169,6 @@ while 1:
 					print( site['id'], key)
 					cur.buy = float(data['buy'])
 					cur.sell = float(data['sell'])
-					cur.save()
 					history = BitcoinHistory();
 					history.buy = float(data['buy'])
 					history.sell = float(data['sell'])
@@ -185,5 +183,6 @@ while 1:
 				cur.lastDayMinBuy, cur.lastDayMinSell, cur.lastDayMaxBuy, cur.lastDayMaxSell = getMin(86400, key, site['id'])
 				cur.lastWeekMinBuy, cur.lastWeekMinSell, cur.lastWeekMaxBuy, cur.lastWeekMaxSell = getMin(604800, key, site['id'])
 				cur.lastMonthMinBuy, cur.lastMonthMinSell, cur.lastMonthMaxBuy, cur.lastMonthMaxSell = getMin(2592000, key, site['id'])
+				cur.save()
 
 	time.sleep(30)
