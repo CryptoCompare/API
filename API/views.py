@@ -26,10 +26,13 @@ class liveData(APIView):
 			json_data = json.loads(f.read())
 			site = [None]*(len(json_data)+1)
 			for key, value in json_data.items():
-				site[int(key)-1] = value
+				site[int(value['id'])-1] = key
 			for cryptoCurrency in body:
+				print(cryptoCurrency, " ")
 				for currency in body[cryptoCurrency]:
+					print(currency , " ")
 					for siteId in body[cryptoCurrency][currency]:
+						print(siteId, " ")
 						buy = BitcoinLiveData.objects.filter(siteId = siteId, currency = currency)
 						serializer = BitcoinLiveDataSerializer(buy, many=True)
 						response[site[int(siteId)-1]] = serializer.data
