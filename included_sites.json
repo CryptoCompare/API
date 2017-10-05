@@ -1,21 +1,54 @@
 {
-  "1": "FYBSG",
-
-  "2": "Coinbase",
-
-  "3": "Coinhako",
-
-  "4": "Zebpay",
-
-  "5": "Cex.io",
-
-  "6": "OKCoin",
-
-  "7": "BitFinex",
-
-  "8": "Bitstamp",
-
-  "9": "GDAX",
-
-  "B"
+  "FYBSG": {
+  	"id": 1,
+  	"currency": ["SGD"]
+  },
+  "Coinbase": {
+  	"id": 2,
+  	"currency": ["SGD","USD"]
+  },
+  "Coinhako": {
+  	"id": 3,
+  	"currency": ["SGD"]
+  },
+  "Zebpay": {
+  	"id": 4,
+  	"currency": ["INR"]
+  },
+  "Cex.io": {
+  	"id": 5,
+  	"currency": ["USD", "EUR"]
+  },
+  "OKCoin": {
+  	"id": 6,
+  	"currency": ["USD", "CNY"]
+  },
+  "BitFinex": {
+  	"id": 7,
+  	"currency": ["USD"]
+  },
+  "Bitstamp": {
+  	"id": 8,
+  	"currency": ["USD", "EUR"]
+  },
+  "GDAX": {
+  	"id": 9,
+  	"currency": ["USD", "EUR"]
+  },
+  "Bitlio": {
+  	"id": 10,
+  	"currency": ["INR"]
+  },
+  "HitBTC": {
+  	"id": 11,
+  	"currency": ["EUR"]
+  },
+  "Kraken": {
+  	"id": 12,
+  	"currency": ["EUR"]
+  },
+  "BTCCHINA": {
+  	"id": 13,
+  	"currency": ["CNY"]
+  }
 }
