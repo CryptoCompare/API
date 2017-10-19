@@ -28,14 +28,17 @@ class liveData(APIView):
 			for key, value in json_data.items():
 				site[int(value['id'])-1] = key
 			for cryptoCurrency in body:
-				print(cryptoCurrency, " ")
+			#	print(cryptoCurrency, " ")
 				for currency in body[cryptoCurrency]:
-					print(currency , " ")
+			#		print(currency , " ")
 					for siteId in body[cryptoCurrency][currency]:
-						print(siteId, " ")
+			#			print(siteId, " ")
 						buy = BitcoinLiveData.objects.filter(siteId = siteId, currency = currency)
 						serializer = BitcoinLiveDataSerializer(buy, many=True)
-						response[site[int(siteId)-1]] = serializer.data
+						if site[int(siteId)-1] in response:
+							response[site[int(siteId)-1]].append(serializer.data)
+						else:
+							response[site[int(siteId)-1]] = [serializer.data]
 		except Exception as e:
 			print(e)
 		#response_json = json.dumps(response)
